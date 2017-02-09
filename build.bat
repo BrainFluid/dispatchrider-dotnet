@@ -22,16 +22,19 @@ REM   e.g. call dotnet build <path> --configuration %config%
 REM - Option 2: Let msbuild handle things and build the solution
 REM "%programfiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" MyLibrary.sln /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
 call dotnet build src\DispatchRider --configuration %config%
+call dotnet build src\DispatchRider.AspNetCore --configuration %config%
 if not "%errorlevel%"=="0" goto failure
 
 REM Unit tests
 REM TODO: Bring these back
 REM call dotnet test test\DispatchRider --configuration %config%
+REM call dotnet test test\DispatchRider.AspNetCore --configuration %config%
 REM if not "%errorlevel%"=="0" goto failure
 
 REM Package
 mkdir %cd%\Artifacts
 call dotnet pack src\DispatchRider --configuration %config% %version% --output Artifacts
+call dotnet pack src\DispatchRider.AspNetCore --configuration %config% %version% --output Artifacts
 if not "%errorlevel%"=="0" goto failure
 
 :success

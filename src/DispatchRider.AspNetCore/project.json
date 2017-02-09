@@ -1,0 +1,22 @@
+{
+  "version": "0.1.0",
+  "description": "DispatchRider for AspNetCore.Mvc",
+  "authors": [
+    "mwilson"
+  ],
+  "dependencies": {
+    "Microsoft.AspNetCore.Mvc": "1.1.0",
+    "Microsoft.Extensions.Logging": "1.1.0",
+    "DispatchRider": "0.1.0"
+  },
+  "frameworks": {
+    "netcoreapp1.1": {
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    },
+    "net451": {},
+    "netstandard1.6": {}
+  }
+}
