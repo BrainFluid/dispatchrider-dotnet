@@ -12,8 +12,11 @@ namespace DispatchRider.AspNetCore
         private readonly IDispatchRider _dispatchRider;
 
         public DispatchRiderService(IOptions<DispatchRiderOptions> options)
+            : this(options.Value) { }
+
+        public DispatchRiderService(DispatchRiderOptions options)
         {
-            _dispatchRider = new DispatchRider(options.Value);
+            _dispatchRider = new DispatchRider(options);
         }
 
         public void HandleException(Exception ex)
@@ -54,12 +57,18 @@ namespace DispatchRider.AspNetCore
         }
 
         public string ParseStream(Stream stream) {
+            if ( null == stream ) {
+                return string.Empty;
+            }
+
             if ( stream.CanSeek ) {
                 stream.Position = 0L;
             }
-            using ( var streamReader = new StreamReader(stream) ) {
-                return streamReader.ReadToEnd();
-            }
+
+            var streamReader = new StreamReader(stream);
+            var result = streamReader.ReadToEnd();
+
+            return result;
         }
     }
 }

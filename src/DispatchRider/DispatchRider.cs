@@ -16,47 +16,47 @@ namespace DispatchRider
         {
             _options = options;
         }
-        public Task Dispatch(Exception ex)
+        public Task<DispatchRiderEvent> Dispatch(Exception ex)
         {
             return Dispatch(ex, string.Empty, string.Empty, null);
         }
 
-        public async Task Dispatch(Exception ex, string httpMethod, string route, IDictionary<string,object> requestParams)
+        public Task<DispatchRiderEvent> Dispatch(Exception ex, string httpMethod, string route, IDictionary<string,object> requestParams)
         {
-            if ( ex is AggregateException ) {
-                foreach ( var agrex in ((AggregateException)ex).Flatten().InnerExceptions ) {
-                    await Dispatch(agrex, httpMethod, route, requestParams);
+            return Dispatch(new DispatchRiderEvent {
+                Exception = ex,
+                HttpMethod = httpMethod,
+                Route = route,
+                RequestParams = requestParams
+            });
+        }
+
+        public async Task<DispatchRiderEvent> Dispatch(DispatchRiderEvent evt)
+        {
+            if ( evt.Exception is AggregateException ) {
+                foreach ( var agrex in ((AggregateException)evt.Exception).Flatten().InnerExceptions ) {
+                    await Dispatch(agrex, evt.HttpMethod, evt.Route, evt.RequestParams);
                 }
-                return;
+                return evt;
             }
             var endpoint = new Uri(_options.BaseUri, "/1.0/record/exception");
             using (var client = new HttpClient())
             {
                 var req = new ExceptionRequest();
-                req.ExceptionType = ex.GetType().ToString();
-                req.Message = ex.Message;
-                req.StackTrace = ex.StackTrace;
-                req.HttpMethod = httpMethod;
-                req.ExceptionData = ex.Data;
-                req.Route = route;
-                req.RequestParams = requestParams;
+                req.ExceptionType = evt.Exception.GetType().ToString();
+                req.Message = evt.Exception.Message;
+                req.StackTrace = evt.Exception.StackTrace;
+                req.HttpMethod = evt.HttpMethod;
+                req.ExceptionData = evt.Exception.Data;
+                req.Route = evt.Route;
+                req.RequestParams = evt.RequestParams;
                 var json = JsonConvert.SerializeObject(req);
                 using (var content = new StringContent(json, Encoding.UTF8, "application/json"))
                 {
                     var request = await client.PostAsync(endpoint, content);
                 }
             }
+            return evt;
         }
     }
-    /*
-    
-
-    public class DispatchRider
-    {
-        public string Message { get; set; }
-        public string StackTrace { get; set; }
-        public DispatchRider InnerException { get; set; }
-        public IDictionary<string, string> RequestArguments { get; set; }
-    }
-    */
 }

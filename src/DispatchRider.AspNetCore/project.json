@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DispatchRider for AspNetCore.Mvc",
   "authors": [
     "mwilson"
@@ -7,7 +7,7 @@
   "dependencies": {
     "Microsoft.AspNetCore.Mvc": "1.1.0",
     "Microsoft.Extensions.Logging": "1.1.0",
-    "DispatchRider": "0.1.0"
+    "DispatchRider": "0.1.1"
   },
   "frameworks": {
     "netcoreapp1.1": {
