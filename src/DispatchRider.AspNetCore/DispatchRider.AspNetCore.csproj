@@ -9,8 +9,16 @@
     <PackageId>DispatchRider.AspNetCore</PackageId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp1.1'">
+    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="../DispatchRider/DispatchRider.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp1.1'">
+    <PackageReference Include="Microsoft.NETCore.App" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0' OR '$(TargetFramework)' == 'netcoreapp1.1' OR '$(TargetFramework)' == 'netstandard1.6'">
