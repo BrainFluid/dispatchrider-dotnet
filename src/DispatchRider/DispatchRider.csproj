@@ -4,15 +4,14 @@
     <Description>DispatchRider .NET Client</Description>
     <VersionPrefix>0.2.0</VersionPrefix>
     <Authors>mwilson</Authors>
-    <TargetFrameworks>netcoreapp1.0;netcoreapp1.1;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;netcoreapp1.1;netcoreapp1.0;netstandard1.6</TargetFrameworks>
     <AssemblyName>DispatchRider</AssemblyName>
     <PackageId>DispatchRider</PackageId>
-    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+wp80+win8+wpa81+dnxcore50;portable-net451+win8</PackageTargetFallback>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="System.Net.Http" Version="4.3.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.2" />
   </ItemGroup>
 
 </Project>
