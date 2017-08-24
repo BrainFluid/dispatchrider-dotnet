@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using DispatchRider.Request;
@@ -42,6 +43,10 @@ namespace DispatchRider
             var endpoint = new Uri(_options.BaseUri, "/1.0/record/exception");
             using (var client = new HttpClient())
             {
+                if ( !string.IsNullOrEmpty(_options.ApiKey)) {
+                    var authArray = Encoding.UTF8.GetBytes("APIKEYUSER:" + _options.ApiKey);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authArray));
+                }
                 var req = new ExceptionRequest();
                 req.ExceptionType = evt.Exception.GetType().ToString();
                 req.Message = evt.Exception.Message;
