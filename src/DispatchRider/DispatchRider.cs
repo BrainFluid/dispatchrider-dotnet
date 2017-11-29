@@ -47,14 +47,15 @@ namespace DispatchRider
                     var authArray = Encoding.UTF8.GetBytes("APIKEYUSER:" + _options.ApiKey);
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authArray));
                 }
-                var req = new ExceptionRequest();
-                req.ExceptionType = evt.Exception.GetType().ToString();
-                req.Message = evt.Exception.Message;
-                req.StackTrace = evt.Exception.StackTrace;
+                var req = new ExceptionRequest(evt.Exception);
                 req.HttpMethod = evt.HttpMethod;
-                req.ExceptionData = evt.Exception.Data;
                 req.Route = evt.Route;
                 req.RequestParams = evt.RequestParams;
+                var innerException = evt.Exception.InnerException;
+                while ( null != innerException ) {
+                    req.AddException(innerException);
+                    innerException = innerException.InnerException;
+                }
                 var json = JsonConvert.SerializeObject(req);
                 using (var content = new StringContent(json, Encoding.UTF8, "application/json"))
                 {
