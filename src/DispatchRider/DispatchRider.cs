@@ -57,6 +57,8 @@ namespace DispatchRider
                     innerException = innerException.InnerException;
                 }
                 var json = JsonConvert.SerializeObject(req);
+                System.Console.WriteLine("Preparing to send payload");
+                System.Console.WriteLine(json);
                 using (var content = new StringContent(json, Encoding.UTF8, "application/json"))
                 {
                     var request = await client.PostAsync(endpoint, content);
