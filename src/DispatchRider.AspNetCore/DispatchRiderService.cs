@@ -17,6 +17,7 @@ namespace DispatchRider.AspNetCore
         public DispatchRiderService(DispatchRiderOptions options)
         {
             _dispatchRider = new DispatchRider(options);
+            _dispatchRider.ContextExceptionFilter = new BaseContextExceptionFilter();
         }
 
         public void HandleException(Exception ex)
@@ -33,15 +34,8 @@ namespace DispatchRider.AspNetCore
         {
             try
             {
-                var requestParams = new Dictionary<string, object>();
-                if ( context.Request.HasFormContentType ) {
-                    foreach ( var key in context.Request.Form.Keys ) {
-                        requestParams.Add(key, context.Request.Form[key]);
-                    }
-                } else {
-                    foreach ( var key in context.Request.Query.Keys ) {
-                        requestParams.Add(key, context.Request.Query[key]);
-                    }
+                if ( null != _dispatchRider.ContextExceptionFilter ) {
+                    _dispatchRider.ContextExceptionFilter.HandleContextException();
                 }
                 await  _dispatchRider.Dispatch(ex, context.Request.Method, context.Request.Path.ToUriComponent(), requestParams);
             }

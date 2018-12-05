@@ -9,14 +9,16 @@ using Newtonsoft.Json;
 
 namespace DispatchRider
 {
-    public class DispatchRider : IDispatchRider
+    public class DispatchRider : IDispatchRiderClient
     {
         private readonly IDispatchRiderOptions _options;
 
         public DispatchRider(IDispatchRiderOptions options)
         {
             _options = options;
+            UserInfo = new UserInfo();
         }
+        public UserInfo UserInfo { get; set; }
         public Task<DispatchRiderEvent> Dispatch(Exception ex)
         {
             return Dispatch(ex, string.Empty, string.Empty, null);

@@ -5,7 +5,7 @@ using DispatchRider.Request;
 
 namespace DispatchRider
 {
-    public interface IDispatchRider
+    public interface IDispatchRiderClient
     {
         Task<DispatchRiderEvent> Dispatch(Exception ex);
         Task<DispatchRiderEvent> Dispatch(Exception ex, string httpMethod, string route, IDictionary<string,object> requestParams);

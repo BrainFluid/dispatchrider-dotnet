@@ -17,6 +17,7 @@ namespace DispatchRider.Request
         }
         public string Route { get; set; }
         public string HttpMethod { get; set; }
+        public UserInfo UserInfo { get; set; }
         public IList<ExceptionModel> Exceptions { get; set; }
         public IDictionary<string, object> RequestParams { get; set; }
 
