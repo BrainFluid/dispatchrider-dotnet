@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>DispatchRider for AspNetCore.Mvc</Description>
-    <VersionPrefix>0.2.0</VersionPrefix>
+    <VersionPrefix>0.3.0</VersionPrefix>
     <Authors>mwilson</Authors>
     <TargetFrameworks>netcoreapp2.0;netcoreapp1.1;netcoreapp1.0;netstandard1.6</TargetFrameworks>
     <AssemblyName>DispatchRider.AspNetCore</AssemblyName>

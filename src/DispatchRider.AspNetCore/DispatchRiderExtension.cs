@@ -2,6 +2,7 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -26,14 +27,14 @@ namespace DispatchRider.AspNetCore
             });
 
         }
-        public static DispatchRiderServicesBuilder AddDispatchRider(this IServiceCollection services)
+        static public DispatchRiderServicesBuilder AddDispatchRider(this IServiceCollection services, IConfiguration configuration)
         {
-            return services.AddDispatchRider(configureOptions: null);
+            return AddDispatchRider(services, configuration, o => new DispatchRiderMiddlewareOptions());
         }
-
-        static public DispatchRiderServicesBuilder AddDispatchRider(this IServiceCollection services, Action<DispatchRiderOptions> configureOptions)
+        static public DispatchRiderServicesBuilder AddDispatchRider(this IServiceCollection services, IConfiguration configuration, Action<DispatchRiderMiddlewareOptions> configureOptions)
         {
             services.TryAddTransient<IDispatchRiderService, DispatchRiderService>();
+            services.Configure<DispatchRiderOptions>(_ => configuration.GetSection("DispatchRider"));
             services.Configure<FormOptions>(s => {
                 s.BufferBody = true;
             });

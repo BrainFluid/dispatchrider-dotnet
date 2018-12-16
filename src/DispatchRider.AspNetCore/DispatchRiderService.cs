@@ -4,20 +4,22 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using DispatchRider;
 
 namespace DispatchRider.AspNetCore
 {
     public class DispatchRiderService : IDispatchRiderService
     {
-        private readonly IDispatchRider _dispatchRider;
+        private readonly IDispatchRiderClient _dispatchRider;
+        private readonly DispatchRiderMiddlewareOptions _options;
 
-        public DispatchRiderService(IOptions<DispatchRiderOptions> options)
-            : this(options.Value) { }
+        public DispatchRiderService(IOptions<DispatchRiderOptions> options, IOptions<DispatchRiderMiddlewareOptions> middlewareOptions)
+            : this(options.Value, middlewareOptions.Value) { }
 
-        public DispatchRiderService(DispatchRiderOptions options)
+        public DispatchRiderService(DispatchRiderOptions options, DispatchRiderMiddlewareOptions middlewareOptions)
         {
             _dispatchRider = new DispatchRider(options);
-            _dispatchRider.ContextExceptionFilter = new BaseContextExceptionFilter();
+            _options = middlewareOptions;
         }
 
         public void HandleException(Exception ex)
@@ -27,15 +29,20 @@ namespace DispatchRider.AspNetCore
 
         public Task HandleContextException(HttpContext context, Exception ex)
         {
-            return HandleContextException(context, ParseStream(context.Request.Body), ex);
+            return HandleContextException(context, ParseStream(context.Request.Body), ex, new Dictionary<string, object>());
         }
 
-        public async Task HandleContextException(HttpContext context, string requestBody, Exception ex)
+        public Task HandleContextException(HttpContext context, string requestBody, Exception ex)
+        {
+            return HandleContextException(context, requestBody, ex, new Dictionary<string, object>() );
+        }
+
+        public async Task HandleContextException(HttpContext context, string requestBody, Exception ex, IDictionary<string,object> requestParams)
         {
             try
             {
-                if ( null != _dispatchRider.ContextExceptionFilter ) {
-                    _dispatchRider.ContextExceptionFilter.HandleContextException();
+                if ( null != _options.ContextExceptionFilter ) {
+                    _options.ContextExceptionFilter.HandleContextException(context);
                 }
                 await  _dispatchRider.Dispatch(ex, context.Request.Method, context.Request.Path.ToUriComponent(), requestParams);
             }

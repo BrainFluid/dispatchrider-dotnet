@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
-namespace DispatchRider
+namespace DispatchRider.AspNetCore
 {
     public class BaseContextExceptionFilter
     {
-        public void HandleContextException(IHttpContext context)
+        public void HandleContextException(HttpContext context)
         {
             var requestParams = new Dictionary<string, object>();
             if ( context.Request.HasFormContentType ) {

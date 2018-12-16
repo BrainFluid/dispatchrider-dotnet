@@ -9,7 +9,7 @@ namespace DispatchRider.AspNetCore
 
         public DispatchRiderServiceTest()
         {
-            _target = new DispatchRiderService(new DispatchRiderOptions());
+            _target = new DispatchRiderService(new DispatchRiderOptions(), new DispatchRiderMiddlewareOptions());
         }
 
         [Fact]
