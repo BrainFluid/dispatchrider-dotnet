@@ -5,7 +5,11 @@ namespace DispatchRider.AspNetCore
 {
     public class BaseContextExceptionFilter
     {
-        public void HandleContextException(HttpContext context)
+        public virtual void ConfigureClient(IDispatchRiderClient client)
+        {
+
+        }
+        public virtual void HandleContextException(HttpContext context)
         {
             var requestParams = new Dictionary<string, object>();
             if ( context.Request.HasFormContentType ) {
