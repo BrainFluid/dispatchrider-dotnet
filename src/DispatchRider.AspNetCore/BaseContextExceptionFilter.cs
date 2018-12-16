@@ -5,7 +5,7 @@ namespace DispatchRider.AspNetCore
 {
     public class BaseContextExceptionFilter
     {
-        public virtual void ConfigureClient(IDispatchRiderClient client)
+        public virtual void ConfigureClient(IDispatchRiderClient client, HttpContext context)
         {
 
         }
